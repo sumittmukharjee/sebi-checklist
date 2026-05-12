@@ -1,43 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>365-Day Planner — RBI Grade B + SEBI Grade A</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+:root{
+  --bg:#08020a;--bg2:#100515;--card:#140818;--card2:#1a0d1f;
+  --border:#2e0d18;--border2:#3d1525;
+  --t1:#f5e6ea;--t2:#c49aaa;--t3:#7a5060;
+  --cr:#e53e3e;--or:#f97316;--am:#fbbf24;--gr:#10b981;--bl:#3b82f6;--pu:#8b5cf6;--cy:#06b6d4;--pi:#ec4899;
+  --crglow:rgba(229,62,62,.15);--orglow:rgba(249,115,22,.1);
+  --shadow:0 2px 16px rgba(229,62,62,.1),0 1px 6px rgba(249,115,22,.07);
+  --tag-r:#e53e3e;--tag-s:#f97316;--tag-b:#d97706;--tag-i:#16a34a;--tag-x:#7c3cd8;
+  --tag-n:#0891b2;--tag-a:#2563eb;--tag-t:#db2777;--tag-g:#6b7280;
+}
+body.light{
+  --bg:#fff8f5;--bg2:#fff0ea;--card:#ffffff;--card2:#fff5f0;
+  --border:#ffd6c8;--border2:#fec8b2;
+  --t1:#1a0508;--t2:#7c3030;--t3:#c47060;
+  --crglow:rgba(229,62,62,.07);--orglow:rgba(249,115,22,.05);
+  --shadow:0 2px 16px rgba(229,62,62,.06),0 1px 6px rgba(249,115,22,.04);
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;transition:background .3s,color .3s}
 #app{max-width:800px;margin:0 auto;padding:12px}
-.card{background:#1e293b;border-radius:12px;padding:16px;margin-bottom:12px}
-.tag{padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;display:inline-block;flex-shrink:0}
-.tab-nav{display:flex;gap:5px;overflow-x:auto;padding:4px 0;margin-bottom:12px;scrollbar-width:thin;scrollbar-color:#334155 transparent;-webkit-overflow-scrolling:touch}
-.tab-nav::-webkit-scrollbar{height:3px}.tab-nav::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
-.tab-btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-size:12px;white-space:nowrap;font-weight:500;transition:background .2s,color .2s;font-family:inherit;flex-shrink:0}
-.week-card{background:#1e293b;border-radius:12px;padding:12px 14px;margin-bottom:7px;cursor:pointer;transition:background .2s}
-.week-card:hover{background:#1e3a5f}
-.acc-section{background:#1e293b;border-radius:12px;padding:14px 16px;margin-bottom:8px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow);transition:background .3s,border .3s}
+.card-glow{border-color:var(--cr) !important;box-shadow:0 0 24px var(--crglow),0 0 8px var(--orglow) !important}
+.tag{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;display:inline-block;flex-shrink:0;white-space:nowrap}
+.tab-nav{display:flex;gap:5px;overflow-x:auto;padding:4px 0;margin-bottom:12px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.tab-nav::-webkit-scrollbar{height:3px}.tab-nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.tab-btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-size:12px;white-space:nowrap;font-weight:500;transition:all .2s;font-family:inherit;flex-shrink:0}
+.week-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:7px;cursor:pointer;transition:all .2s}
+.week-card:hover{border-color:var(--or);box-shadow:0 0 12px var(--orglow)}
+.acc-sec{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;transition:all .3s}
 .sec-hdr{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:10px;user-select:none}
-.chk-item{display:flex;gap:10px;align-items:flex-start;padding:7px 6px;cursor:pointer;border-radius:6px;margin-bottom:3px;transition:background .2s;user-select:none}
-.checkbox{width:17px;height:17px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s;font-size:10px;font-weight:800;color:white;line-height:1}
+.chk-row{display:flex;gap:10px;align-items:flex-start;padding:8px 6px;cursor:pointer;border-radius:6px;margin-bottom:2px;transition:background .2s;user-select:none}
+.chk-box{width:16px;height:16px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:all .2s;font-size:9px;font-weight:900;color:white;line-height:1}
 .phase-btn{flex:1;padding:8px 4px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;line-height:1.4;font-family:inherit;border:2px solid transparent;transition:all .2s}
+.etag{padding:2px 6px;border-radius:3px;font-size:9px;font-weight:800;display:inline-block;margin:1px 2px 1px 0;white-space:nowrap}
+.toggle-btn{position:fixed;top:12px;right:12px;z-index:999;padding:7px 12px;border-radius:20px;border:1px solid var(--border2);cursor:pointer;font-size:11px;font-weight:700;background:var(--card);color:var(--t2);transition:all .2s;font-family:inherit}
+.toggle-btn:hover{border-color:var(--or);color:var(--or)}
+.glow-bar{background:linear-gradient(90deg,var(--cr),var(--or),var(--am));border-radius:6px;height:10px;transition:width .4s}
+.prog-wrap{background:var(--border2);border-radius:6px;height:10px;width:240px;overflow:hidden;margin:0 auto}
+hr.div{border:none;border-top:1px solid var(--border);margin:8px 0}
 </style>
 </head>
 <body>
+<button class="toggle-btn" onclick="toggleTheme()" id="themeBtn">☀️ Light</button>
 <div id="app"></div>
 <script>
+// ─── EXAM TAG CONFIG ─────────────────────────────────────────────────────────
+const EC={
+  R:{code:"RBI",color:"#e53e3e"},
+  S:{code:"SEBI",color:"#f97316"},
+  B:{code:"SBI PO",color:"#d97706"},
+  I:{code:"IBPS",color:"#16a34a"},
+  X:{code:"SSC",color:"#7c3cd8"},
+  N:{code:"NICL/NIACL",color:"#0891b2"},
+  A:{code:"NABARD",color:"#2563eb"},
+  T:{code:"RBI Asst",color:"#db2777"},
+  G:{code:"Regulatory",color:"#6b7280"}
+};
+// ALL = R,S,B,I,X,N,A,T,G
+const ALL=["R","S","B","I","X","N","A","T","G"];
+const BNK=["R","S","B","I","N","A","T"]; // all banking
+const REG=["R","S","A","G"]; // regulatory focused
+
+// Topic → Exam tags map  [subjectIdx][topicIdx] = [exam codes]
+const TM=[
+  // 0: English
+  [ALL,ALL,ALL,ALL,ALL,ALL,["R","S","B","I","N","A","T"],ALL,["R","S","B","A","N"],["R","S","B","A"],["R","S","A"],["R","S"]],
+  // 1: Quant
+  [ALL,ALL,ALL,ALL,ALL,ALL,ALL,ALL,["R","S","B","I","N","A","T"],["R","S","B","I","N","A"],["R","S","A","B"],["R","S","B","I"],["R","S","B","I","N","A","T"],["R","S","B","I","X"],["R","S","B","I"],ALL],
+  // 2: Reasoning
+  [ALL,ALL,ALL,["R","S","B","I","N","A","T"],["R","S","B","I","N","A"],["R","S","B","I","N","A","T"],ALL,["R","S","B","I","N","A","T"],["R","S","B","I","N","A"],["R","S","B","A","X"],["R","S","A","X"],["R","S","A"],ALL,["R","S","B","I"],["R","S","B","I","T"]],
+  // 3: GA
+  [ALL,ALL,["R","S","B","I","N","A","T"],ALL,["R","S","A","B"],ALL,ALL,ALL,ALL,ALL,ALL,["R","S","A","B","I"],ALL,ALL],
+  // 4: ESI
+  [["R","S","A","G"],["R","S","A","G"],["R","S","A"],["R","A"],["R","A"],["R","S","A"],["R","S","G"],["R","A"],["R","S","A","G"],["R","S","A","G"],["R","S","A"],["R","S","A","G"],["R","S","A","G"],["R","A"],["R","A"],["R","S","A"],["R","S","A","G"],["R","S","A","G"]],
+  // 5: F&M
+  [["R","S","A","G"],["R","S","G","A"],["R","S","A","I","B"],["R","I","B","A"],["R","S","A","N"],["R","B","I","A","N"],["R","S","A"],["R","S","A","G"],["R","A","B","I"],["R","S","G","A"],["R","S"],["R","S"],["R","S"],["R","S"],["R","S"],["R","S"],["R","S","G"],["R","S","A","N","G"]],
+  // 6: SEBI Markets
+  [["S","G"],["S","G"],["S","G"],["S","R","G"],["S","G"],["S","G"],["S","G","R"],["S","G"],["S","R","G"],["S","G"],["S","G","R"],["S","G"],["S","G"],["S","G","R"],["S","G","R"],["S","G"],["S","G"],["S","G"],["S","G"],["S","G"]]
+];
+
+// ─── SYLLABUS DATA ────────────────────────────────────────────────────────────
 const SK=["📝 English Language","🔢 Quantitative Aptitude","🧠 Reasoning Ability","📰 General Awareness & Current Affairs","📊 Economic & Social Issues (RBI Grade B)","💰 Finance & Management (RBI Grade B)","📈 Securities Market — SEBI Grade A"];
 const SYL={
-"📝 English Language":{color:"#3B82F6",topics:["Grammar: Tenses, Voice, Narration, Modals, Conditionals","Grammar: Subject-Verb Agreement, Articles & Prepositions","Reading Comprehension — short & long passages, inference/tone","Vocabulary: Synonyms & Antonyms (Word Power Made Easy)","Vocabulary: One-word substitution, Phrasal verbs & Idioms","Error Detection & Sentence Correction (all patterns)","Para-jumbles & Sentence Ordering (PQRS & odd-one-out)","Cloze Test & Fill in the Blanks (double fillers)","Descriptive — Essay Writing (250–500 words, timed)","Descriptive — Letter / Application Writing","Descriptive — Précis Writing (400 to 100 words)","Descriptive — Report / Summary / Business Writing"]},
-"🔢 Quantitative Aptitude":{color:"#10B981",topics:["Number System: HCF, LCM, Divisibility Rules, Remainders","Simplification & Approximation (BODMAS, Surds, Indices)","Percentage, Profit & Loss, Discount","Ratio, Proportion & Partnership","Simple Interest & Compound Interest","Time, Speed & Distance (Trains, Boats & Streams)","Time & Work, Pipes & Cisterns","Average, Mixture & Alligation","Data Interpretation — Bar, Line, Pie Charts","Data Interpretation — Tables & Caselets","Data Interpretation — Missing & Mixed DI (advanced)","Data Sufficiency","Number Series & Missing Numbers","Permutation, Combination & Probability","Quadratic Equations","Mensuration — 2D & 3D (area, volume)"]},
-"🧠 Reasoning Ability":{color:"#8B5CF6",topics:["Syllogism — all types including possibility & reversal","Blood Relations & Family Trees","Directions & Distance","Seating Arrangement — Linear (1 & 2 row)","Seating Arrangement — Circular & Square","Puzzles — Floor/Box/Month/Date/Scheduling","Coding-Decoding (old pattern & new pattern)","Inequalities — Direct & Coded","Input-Output Machines","Logical Reasoning — Assumptions & Conclusions","Logical Reasoning — Arguments & Course of Action","Critical Reasoning — RBI/SEBI pattern (CR passages)","Analogy & Classification","Data Sufficiency in Reasoning","Alphanumeric Series & Order-Ranking"]},
-"📰 General Awareness & Current Affairs":{color:"#F59E0B",topics:["Daily CA routine: The Hindu + PIB + ET + Indian Express","Monthly CA Capsule revision (GKToday/Jagran Josh)","Banking & Financial Awareness: RBI, MPC, Repo, CRR, SLR","Union Budget — all editions (focus current year)","Economic Survey — key themes and headline data","Government Schemes: PM schemes, missions, NIP, PLI","Static GK: National/International org HQs & heads","Awards & Honours: Padma, Nobel, Bharat Ratna, etc.","Books & Authors: recent publications & authors","Science & Technology: ISRO, DRDO, IT milestones","International Summits, Treaties, Agreements 2025-26","India Global Rankings: HDI, GHI, EoDB, Press Freedom","Environment: Paris Agreement, SDGs, COP updates","Sports: Major tournaments & India results (2025-26)"]},
-"📊 Economic & Social Issues (RBI Grade B)":{color:"#EF4444",topics:["Growth, Development & Economic Welfare — core concepts","Indian Economy Post-1991: LPG reforms, milestones","NITI Aayog: role, composition, Viksit Bharat 2047","Poverty & Inequality: measurement, trends, programs","Agriculture: MSP, PMFBY, PM-KISAN, e-NAM, food security","Industry: PLI, Make in India, MSME, AtmaNirbhar Bharat","Services Sector & Digital Economy: IT, BFSI, e-commerce","Infrastructure: PM GatiShakti, NIP, transport, energy","Indian Financial System: banks, NBFCs, microfinance, SFBs","Monetary Policy: MPC, instruments, transmission mechanism","Fiscal Policy: FRBM, deficit types, public debt management","External Sector: BOP, CAD, FDI, FII, exchange rate regimes","WTO, IMF, World Bank, ADB: India's role & obligations","Social Issues: Education (NEP 2020), Health (NHP, Ayushman)","Gender, Urbanisation, Demographic Dividend data & policy","Human Development Index, UNDP, World Happiness Reports","Environment & Sustainable Development — SDG progress India","Climate Change: India's NDCs, COP, UNFCCC commitments"]},
-"💰 Finance & Management (RBI Grade B)":{color:"#EC4899",topics:["Financial System: structure, markets, institutions overview","Capital Market & Money Market instruments (T-bills, CPs, CDs)","RBI: functions, structure, monetary policy tools, Acts","Banking Regulation Act 1949 — key provisions","Basel I, II, III norms: CRAR, Tier 1 & 2 capital, LCR, NSFR","NPA classification, Provisioning norms, SARFAESI, IBC 2016","CAMELS rating framework for banks","International Institutions: IMF, World Bank, BIS, ADB","Financial Inclusion: PMJDY, BC model, SFBs, Payments Banks","Fintech: UPI, CBDC, BNPL, digital lending, RegTech, SandBox","Management Principles: Fayol's 14 principles","Scientific Management: Taylor, Hawthorne studies","Organisational Behaviour: Maslow, Herzberg, McGregor X&Y","Leadership Styles: transformational, transactional, situational","Communication in Organisations: formal & informal channels","HR Management: Recruitment, Training & Development, Appraisal","Corporate Governance: SEBI LODR, board structure, CSR","Risk Management: types of risk, ERM framework, VaR basics"]},
-"📈 Securities Market — SEBI Grade A":{color:"#06B6D4",topics:["SEBI Act 1992: powers, functions, board composition","Securities Contracts (Regulation) Act 1956 — SCRA","Depositories Act 1996: NSDL, CDSL, DP system, dematerialisation","Companies Act 2013: capital market relevant sections","Primary Markets: IPO process, DRHP, BRLM, pricing, listing","Primary Markets: FPO, Rights Issue, Bonus, OFS, QIP","Secondary Markets: NSE/BSE, trading mechanism, order types","T+1 Settlement & Rolling Settlement mechanics","Mutual Funds: AMFI, categories (SEBI MF categorisation 2017)","MF: SID, SAI, KIM, SEBI MF Regulations 1996","Derivatives: Futures & Options — concepts, payoffs, Greeks (basic)","Derivatives: Index & Stock F&O, margin system, settlement","Commodity Derivatives: MCX, NCDEX, SEBI's expanded role","Alternative Investment Funds (AIFs): Category I, II, III","InvITs & REITs: structure, regulation, listing","Foreign Portfolio Investors (FPI): SEBI FPI Regulations 2019","Takeover Code: SEBI SAST Regulations 2011","Insider Trading: SEBI PIT Regulations 2015","LODR: Listing Obligations & Disclosure Requirements","Investor Protection: SCORES portal, IEPF, SEBI Saksham"]}
+"📝 English Language":{color:"#3b82f6",topics:["Grammar: Tenses, Voice, Narration, Modals, Conditionals","Grammar: Subject-Verb Agreement, Articles & Prepositions","Reading Comprehension — short & long passages, inference/tone","Vocabulary: Synonyms & Antonyms (Word Power Made Easy)","Vocabulary: One-word substitution, Phrasal verbs & Idioms","Error Detection & Sentence Correction (all patterns)","Para-jumbles & Sentence Ordering (PQRS & odd-one-out)","Cloze Test & Fill in the Blanks (double fillers)","Descriptive — Essay Writing (250–500 words, timed)","Descriptive — Letter / Application Writing","Descriptive — Précis Writing (400→100 words)","Descriptive — Report / Summary / Business Writing"]},
+"🔢 Quantitative Aptitude":{color:"#10b981",topics:["Number System: HCF, LCM, Divisibility Rules, Remainders","Simplification & Approximation (BODMAS, Surds, Indices)","Percentage, Profit & Loss, Discount","Ratio, Proportion & Partnership","Simple Interest & Compound Interest","Time, Speed & Distance (Trains, Boats & Streams)","Time & Work, Pipes & Cisterns","Average, Mixture & Alligation","Data Interpretation — Bar, Line, Pie Charts","Data Interpretation — Tables & Caselets","Data Interpretation — Missing & Mixed DI (advanced)","Data Sufficiency","Number Series & Missing Numbers","Permutation, Combination & Probability","Quadratic Equations","Mensuration — 2D & 3D (area, volume)"]},
+"🧠 Reasoning Ability":{color:"#8b5cf6",topics:["Syllogism — all types including possibility & reversal","Blood Relations & Family Trees","Directions & Distance","Seating Arrangement — Linear (1 & 2 row)","Seating Arrangement — Circular & Square","Puzzles — Floor/Box/Month/Date/Scheduling","Coding-Decoding (old pattern & new pattern)","Inequalities — Direct & Coded","Input-Output Machines","Logical Reasoning — Assumptions & Conclusions","Logical Reasoning — Arguments & Course of Action","Critical Reasoning — RBI/SEBI pattern (CR passages)","Analogy & Classification","Data Sufficiency in Reasoning","Alphanumeric Series & Order-Ranking"]},
+"📰 General Awareness & Current Affairs":{color:"#f59e0b",topics:["Daily CA routine: The Hindu + PIB + ET + Indian Express","Monthly CA Capsule revision (GKToday/Jagran Josh)","Banking & Financial Awareness: RBI, MPC, Repo, CRR, SLR","Union Budget — all editions (focus current year)","Economic Survey — key themes and headline data","Government Schemes: PM schemes, missions, NIP, PLI","Static GK: National/International org HQs & heads","Awards & Honours: Padma, Nobel, Bharat Ratna, etc.","Books & Authors: recent publications & authors","Science & Technology: ISRO, DRDO, IT milestones","International Summits, Treaties, Agreements 2025-26","India Global Rankings: HDI, GHI, EoDB, Press Freedom","Environment: Paris Agreement, SDGs, COP updates","Sports: Major tournaments & India results (2025-26)"]},
+"📊 Economic & Social Issues (RBI Grade B)":{color:"#ef4444",topics:["Growth, Development & Economic Welfare — core concepts","Indian Economy Post-1991: LPG reforms, milestones","NITI Aayog: role, composition, Viksit Bharat 2047","Poverty & Inequality: measurement, trends, programs","Agriculture: MSP, PMFBY, PM-KISAN, e-NAM, food security","Industry: PLI, Make in India, MSME, AtmaNirbhar Bharat","Services Sector & Digital Economy: IT, BFSI, e-commerce","Infrastructure: PM GatiShakti, NIP, transport, energy","Indian Financial System: banks, NBFCs, microfinance, SFBs","Monetary Policy: MPC, instruments, transmission mechanism","Fiscal Policy: FRBM, deficit types, public debt management","External Sector: BOP, CAD, FDI, FII, exchange rate regimes","WTO, IMF, World Bank, ADB: India's role & obligations","Social Issues: Education (NEP 2020), Health (NHP, Ayushman)","Gender, Urbanisation, Demographic Dividend data & policy","Human Development Index, UNDP, World Happiness Reports","Environment & Sustainable Development — SDG progress India","Climate Change: India's NDCs, COP, UNFCCC commitments"]},
+"💰 Finance & Management (RBI Grade B)":{color:"#ec4899",topics:["Financial System: structure, markets, institutions overview","Capital Market & Money Market instruments (T-bills, CPs, CDs)","RBI: functions, structure, monetary policy tools, Acts","Banking Regulation Act 1949 — key provisions","Basel I, II, III norms: CRAR, Tier 1 & 2 capital, LCR, NSFR","NPA classification, Provisioning norms, SARFAESI, IBC 2016","CAMELS rating framework for banks","International Institutions: IMF, World Bank, BIS, ADB","Financial Inclusion: PMJDY, BC model, SFBs, Payments Banks","Fintech: UPI, CBDC, BNPL, digital lending, RegTech, SandBox","Management Principles: Fayol's 14 principles","Scientific Management: Taylor, Hawthorne studies","Organisational Behaviour: Maslow, Herzberg, McGregor X&Y","Leadership Styles: transformational, transactional, situational","Communication in Organisations: formal & informal channels","HR Management: Recruitment, Training & Development, Appraisal","Corporate Governance: SEBI LODR, board structure, CSR","Risk Management: types of risk, ERM framework, VaR basics"]},
+"📈 Securities Market — SEBI Grade A":{color:"#06b6d4",topics:["SEBI Act 1992: powers, functions, board composition","Securities Contracts (Regulation) Act 1956 — SCRA","Depositories Act 1996: NSDL, CDSL, DP system, dematerialisation","Companies Act 2013: capital market relevant sections","Primary Markets: IPO process, DRHP, BRLM, pricing, listing","Primary Markets: FPO, Rights Issue, Bonus, OFS, QIP","Secondary Markets: NSE/BSE, trading mechanism, order types","T+1 Settlement & Rolling Settlement mechanics","Mutual Funds: AMFI, categories (SEBI MF categorisation 2017)","MF: SID, SAI, KIM, SEBI MF Regulations 1996","Derivatives: Futures & Options — concepts, payoffs, Greeks (basic)","Derivatives: Index & Stock F&O, margin system, settlement","Commodity Derivatives: MCX, NCDEX, SEBI's expanded role","Alternative Investment Funds (AIFs): Category I, II, III","InvITs & REITs: structure, regulation, listing","Foreign Portfolio Investors (FPI): SEBI FPI Regulations 2019","Takeover Code: SEBI SAST Regulations 2011","Insider Trading: SEBI PIT Regulations 2015","LODR: Listing Obligations & Disclosure Requirements","Investor Protection: SCORES portal, IEPF, SEBI Saksham"]}
 };
 
+// ─── EXTRA TOPICS ─────────────────────────────────────────────────────────────
+const EXTRA=[
+{cat:"📐 SSC-Specific: Quantitative Aptitude",color:"#7c3cd8",exams:["SSC CGL","SSC CHSL","SSC MTS","Railway"],border:"#5b21b6",topics:[
+  {t:"Geometry: Lines, Angles, Triangles (congruence & similarity), Circles, Polygons, Quadrilaterals",ex:["SSC CGL","SSC CHSL","Railway"]},
+  {t:"Trigonometry: Sin/Cos/Tan identities, Complementary angles, Heights & Distances",ex:["SSC CGL","SSC CHSL","Railway"]},
+  {t:"Algebra: Basic algebraic identities, Surds & Indices, Linear & Polynomial expressions",ex:["SSC CGL","SSC CHSL","Railway"]},
+  {t:"Coordinate Geometry: Distance formula, Midpoint, Slope of a line (Tier 2 level)",ex:["SSC CGL Tier 2"]},
+]},
+{cat:"🔷 SSC-Specific: Reasoning (Non-Verbal)",color:"#6d28d9",exams:["SSC CGL","SSC CHSL","SSC Steno","Railway","Defence"],border:"#5b21b6",topics:[
+  {t:"Non-Verbal Series: Figure series, Pattern completion, Matrix-based questions",ex:["SSC CGL","SSC CHSL","Railway","Defence"]},
+  {t:"Mirror & Water Images, Embedded Figures, Figure Counting",ex:["SSC CGL","SSC CHSL","SSC MTS","Railway"]},
+  {t:"Paper Cutting & Folding, Cube & Dice Problems",ex:["SSC CGL","SSC CHSL","Railway"]},
+  {t:"Clocks & Calendars (deep-level: day-of-week, odd days method)",ex:["SSC CGL","SSC CHSL","Railway"]},
+  {t:"Venn Diagrams (set-based): missing values in Venn circles",ex:["SSC CGL","SSC CHSL"]},
+]},
+{cat:"🏛 SSC-Specific: General Awareness (Static GK)",color:"#7c3cd8",exams:["SSC CGL","SSC CHSL","SSC MTS","Railway","State PSC"],border:"#5b21b6",topics:[
+  {t:"Indian History: Ancient India (Vedic, Maurya, Gupta), Medieval India (Delhi Sultanate, Mughals), Modern India (Freedom Movement, 1857–1947)",ex:["SSC CGL","SSC CHSL","Railway","State PSC"]},
+  {t:"Indian Polity: Constitution (Preamble, FR, DPSP), Parliament, Judiciary, Amendments (42nd, 44th, 73rd, 74th, 86th, 101st)",ex:["SSC CGL","SSC CHSL","Railway"]},
+  {t:"Indian Geography: Physical features, Himalayas, Rivers, Soils, Climate zones, Agricultural regions",ex:["SSC CGL","SSC CHSL","Railway","State PSC"]},
+  {t:"General Science: Physics (motion, light, electricity), Chemistry (elements, acids-bases, chemical reactions), Biology (nutrition, diseases, cell, genetics)",ex:["SSC CGL","SSC CHSL","SSC MTS","Railway"]},
+  {t:"Indian Art & Culture, World Heritage Sites (UNESCO listed in India), Dance forms, Classical music",ex:["SSC CGL","SSC CHSL","Railway"]},
+]},
+{cat:"💻 Banking-Specific: Computer Knowledge",color:"#0891b2",exams:["IBPS Clerk","IBPS PO Mains","SBI Clerk","RBI Assistant","MP Apex Bank CO"],border:"#0e7490",topics:[
+  {t:"MS Office: Word (formatting, mail merge), Excel (formulas, pivot), PowerPoint (slide design)",ex:["IBPS Clerk","SBI Clerk","RBI Asst","MP Apex Bank"]},
+  {t:"Internet Basics: URLs, protocols (HTTP/HTTPS), browsers, email management, e-banking concepts",ex:["IBPS Clerk","SBI Clerk","RBI Asst","SSC CGL Tier 2"]},
+  {t:"Networking: LAN/WAN/MAN, OSI model basics, TCP/IP, hardware (router, switch, hub, modem)",ex:["IBPS Clerk","SBI Clerk","RBI Asst","SSC CGL Tier 2"]},
+  {t:"Cyber Security: Types of malware (virus, worm, trojan, ransomware), phishing, firewalls, encryption basics",ex:["IBPS","SBI","RBI Asst","SSC CGL Tier 2"]},
+  {t:"Computer Hardware & Software: Input/output devices, storage devices, operating systems, DBMS basics",ex:["IBPS Clerk","SBI Clerk","RBI Asst","MP Apex Bank"]},
+  {t:"Keyboard Shortcuts, Number Systems (Binary/Decimal/Octal/Hex conversions)",ex:["IBPS Clerk","SBI Clerk","RBI Asst"]},
+]},
+{cat:"🛡 Insurance-Specific: Insurance Awareness",color:"#0891b2",exams:["NICL AO","NIACL AO","LIC AAO","IRDAI Grade A"],border:"#0e7490",topics:[
+  {t:"Types of Insurance: Life vs Non-Life, Health, Marine, Fire, Motor, Crop insurance",ex:["NICL AO","NIACL AO","LIC AAO","IRDAI Grade A"]},
+  {t:"IRDAI: functions, powers, Insurance Act 1938 & Insurance (Amendment) Act 2015, IRDA Regulations",ex:["NICL AO","NIACL AO","LIC AAO","IRDAI Grade A"]},
+  {t:"Life Insurance: LIC products (term, endowment, ULIP, annuity), surrender value, bonus concepts",ex:["LIC AAO","NICL AO","NIACL AO"]},
+  {t:"General Insurance: GIC subsidiaries (New India, Oriental, National, United India), reinsurance, coinsurance",ex:["NICL AO","NIACL AO","LIC HFL"]},
+  {t:"Insurance Terminologies: premium, sum assured, beneficiary, indemnity, subrogation, contribution, proximate cause",ex:["NICL AO","NIACL AO","LIC AAO","IRDAI"]},
+]},
+{cat:"🌾 NABARD-Specific: Rural & Agricultural Finance",color:"#2563eb",exams:["NABARD Grade A","NABARD Grade B","IBPS RRB PO"],border:"#1d4ed8",topics:[
+  {t:"Priority Sector Lending (PSL): targets (40%), sub-targets for agriculture (18%), MSMEs, weaker sections — RBI norms",ex:["NABARD Grade A","IBPS RRB PO","RBI Grade B"]},
+  {t:"SHG-Bank Linkage Programme: SHG model, NABARD's role, JLG, microfinance institutions (MFIs)",ex:["NABARD Grade A","NABARD Grade B","IBPS RRB"]},
+  {t:"RIDF (Rural Infrastructure Development Fund): purpose, tranches, eligible projects",ex:["NABARD Grade A","NABARD Grade B"]},
+  {t:"Kisan Credit Card (KCC), PM-KISAN, Pradhan Mantri Fasal Bima Yojana (PMFBY), e-NAM platform",ex:["NABARD Grade A","RBI Grade B","IBPS RRB"]},
+  {t:"Regional Rural Banks (RRBs): structure, NABARD's supervisory role, recapitalisation, performance",ex:["NABARD Grade A","NABARD Grade B","IBPS RRB"]},
+  {t:"Agricultural Credit: flow targets, long-term cooperative credit structure, NABARD refinance schemes",ex:["NABARD Grade A","NABARD Grade B"]},
+]}
+];
+
+// ─── PHASES ───────────────────────────────────────────────────────────────────
 const PHASES=[
-{id:0,title:"Phase 1",sub:"Foundation",days:"Days 1–91",color:"#3B82F6",goal:"Build unshakeable fundamentals in English, Quant, and Reasoning. Establish the daily current affairs habit from Day 1.",weeks:[
+{id:0,title:"Phase 1",sub:"Foundation",days:"Days 1–91",color:"#3b82f6",
+goal:"Build unshakeable fundamentals in English, Quant, and Reasoning. Establish the daily current affairs habit from Day 1.",
+weeks:[
 {w:1,d:"1–7",sub:"English",focus:"Grammar Foundation",topics:"Tenses, Voice, Narration, Parts of Speech, Clauses",daily:"20 English MCQs + read 1 editorial",target:"Complete Wren & Martin Chs 1–12"},
 {w:2,d:"8–14",sub:"English",focus:"Reading Comprehension",topics:"Long/short RC, inference, tone, title & author intent questions",daily:"2 RC passages + 15 vocab questions",target:"RC accuracy ≥ 70%"},
 {w:3,d:"15–21",sub:"English",focus:"Error Detection & Fillers",topics:"Sentence correction, double fillers, cloze tests (all patterns)",daily:"30 mixed English MCQs",target:"Error detection accuracy ≥ 75%"},
@@ -51,7 +161,9 @@ const PHASES=[
 {w:11,d:"71–77",sub:"Reasoning",focus:"Logical & Critical Reasoning",topics:"Assumptions, Arguments, Conclusions, Course of Action, CR passages",daily:"20 LR + 2 CR passages",target:"CR accuracy ≥ 70%"},
 {w:12,d:"78–84",sub:"Reasoning",focus:"Coding, Directions, Blood Relations",topics:"New-pattern coding, direction-distance, Input-Output machines",daily:"30 mixed Reasoning MCQs",target:"Input-Output in under 5 min"},
 {w:13,d:"85–91",sub:"Revision + GA",focus:"Phase 1 Revision + Banking GA Intro",topics:"All Phase 1 topics + RBI overview, banking awareness basics",daily:"Full 50-Q sectional mock per subject",target:"Sectional mock score ≥ 65%"}]},
-{id:1,title:"Phase 2",sub:"Core Subjects",days:"Days 92–182",color:"#10B981",goal:"Master ESI, Finance & Management, and SEBI Capital Markets. Deepen GA and current affairs coverage alongside.",weeks:[
+{id:1,title:"Phase 2",sub:"Core Subjects",days:"Days 92–182",color:"#10b981",
+goal:"Master ESI, Finance & Management, and SEBI Capital Markets. Deepen GA and current affairs coverage alongside.",
+weeks:[
 {w:14,d:"92–98",sub:"ESI",focus:"Indian Economy Overview",topics:"GDP, growth concepts, 1991 LPG reforms, NITI Aayog, Viksit Bharat",daily:"Chapter reading + notes + 20 GA MCQs",target:"Write 1-page India economy summary"},
 {w:15,d:"99–105",sub:"ESI",focus:"Agriculture & Poverty",topics:"Poverty lines, MSP, MGNREGA, PMFBY, PM-KISAN, food security",daily:"Notes + MCQs + 1 agriculture editorial",target:"Know all farm flagship schemes"},
 {w:16,d:"106–112",sub:"ESI",focus:"Industry, Services & Infrastructure",topics:"PLI Scheme, Make in India, NIP, Smart Cities, energy policy",daily:"Notes + MCQs + editorial",target:"Timeline of industrial policies 1991–present"},
@@ -65,13 +177,15 @@ const PHASES=[
 {w:24,d:"162–168",sub:"SEBI",focus:"Secondary Markets & Derivatives",topics:"NSE/BSE, T+1 settlement, Futures & Options basics, margin system",daily:"Chapter study + 20 SEBI MCQs",target:"Explain call option payoff diagram"},
 {w:25,d:"169–175",sub:"SEBI",focus:"Mutual Funds, AIFs, FPIs",topics:"MF categories (SEBI 2017), SEBI MF Regulations, AIFs, InvITs, REITs",daily:"Notes + 20 MCQs",target:"MF category classification table done"},
 {w:26,d:"176–182",sub:"All Core",focus:"Phase 2 Comprehensive Revision",topics:"ESI + F&M + SEBI full revision, cross-linking concepts",daily:"50-Q core subject mock + 1 timed essay",target:"Core subject mock score ≥ 70%"}]},
-{id:2,title:"Phase 3",sub:"Advanced & Integration",days:"Days 183–273",color:"#F59E0B",goal:"PYQ analysis, advanced DI/puzzles, descriptive writing mastery, current affairs integration, and full cross-subject mock practice.",weeks:[
-{w:27,d:"183–189",sub:"CA",focus:"CA Backlog — Jan to Apr 2026",topics:"Monthly capsules, economic events, RBI/SEBI circulars, global finance news",daily:"2 hrs CA revision + 30 GA MCQs",target:"6 months CA fully covered in notes"},
-{w:28,d:"190–196",sub:"CA",focus:"CA May to Aug 2026",topics:"Budget 2026 deep dive, RBI policy actions, SEBI regulatory updates",daily:"2 hrs CA + 30 GA MCQs",target:"Budget 2026 one-pager complete"},
+{id:2,title:"Phase 3",sub:"Advanced",days:"Days 183–273",color:"#f97316",
+goal:"PYQ analysis, advanced DI & puzzles, descriptive writing mastery, current affairs integration, and full cross-subject mock practice.",
+weeks:[
+{w:27,d:"183–189",sub:"CA",focus:"CA Backlog — Jan–Apr 2026",topics:"Monthly capsules, economic events, RBI/SEBI circulars, global finance news",daily:"2 hrs CA revision + 30 GA MCQs",target:"6 months CA fully covered in notes"},
+{w:28,d:"190–196",sub:"CA",focus:"CA May–Aug 2026",topics:"Budget 2026 deep dive, RBI policy actions, SEBI regulatory updates",daily:"2 hrs CA + 30 GA MCQs",target:"Budget 2026 one-pager complete"},
 {w:29,d:"197–203",sub:"ESI Adv",focus:"Fintech & Digital Economy",topics:"UPI ecosystem, CBDC, digital lending, DPDP Act, crypto regulations",daily:"Reading + 2 essays on fintech topics",target:"500-word fintech regulation essay"},
 {w:30,d:"204–210",sub:"PYQ",focus:"RBI Grade B PYQs 2018–2024",topics:"Phase 1 + Phase 2 previous papers, pattern analysis, recurring topics",daily:"1 full PYQ paper + topic annotation",target:"Top 25 recurring RBI topics list made"},
 {w:31,d:"211–217",sub:"PYQ",focus:"SEBI Grade A PYQs 2018–2024",topics:"Phase 1 + Phase 2 papers, capital market Q patterns, regulation Qs",daily:"1 full SEBI PYQ paper + analysis",target:"SEBI recurring topics high-priority list"},
-{w:32,d:"Quant Adv",focus:"High-Level DI & Probability",d:"218–224",sub:"Quant Adv",topics:"Missing DI, 2-variable tables, P&C, advanced probability, mixed Qs",daily:"3 advanced DI sets + 20 Quant MCQs",target:"Advanced DI accuracy ≥ 80%"},
+{w:32,d:"218–224",sub:"Quant Adv",focus:"High-Level DI & Probability",topics:"Missing DI, 2-variable tables, P&C, advanced probability, mixed Qs",daily:"3 advanced DI sets + 20 Quant MCQs",target:"Advanced DI accuracy ≥ 80%"},
 {w:33,d:"225–231",sub:"Reasoning Adv",focus:"High-Level Puzzles & CR",topics:"Multi-constraint puzzles (5+ variables), advanced critical reasoning",daily:"4 high-difficulty puzzles per day",target:"5-variable puzzle in under 10 min"},
 {w:34,d:"232–238",sub:"Descriptive",focus:"Essay & Précis Intensive",topics:"Economy essays, finance essays, social issue essays, précis technique",daily:"2 timed essays + 1 précis daily",target:"Essays done: economy, fintech, ESG, SDGs, monetary policy"},
 {w:35,d:"239–245",sub:"F&M Adv",focus:"Corporate Governance & Ethics",topics:"Board structure, SEBI LODR, CSR (Companies Act), ERM, HR strategy",daily:"Reading + 15 MCQs + 1 essay",target:"Corporate governance 400-word essay"},
@@ -79,13 +193,15 @@ const PHASES=[
 {w:37,d:"253–259",sub:"GA Adv",focus:"Static GK + Rankings Integration",topics:"Intl org HQs & heads, India global rankings, all awards 2025–26",daily:"30 GA MCQs + self-quiz flashcards",target:"Static GK mock score ≥ 80%"},
 {w:38,d:"260–266",sub:"Integration",focus:"Full Phase 1 Mock Intensive",topics:"Full 200-Q Phase 1 mocks, identify weak areas, targeted revision",daily:"1 full Phase 1 mock + 2-hr analysis",target:"Phase 1 mock score ≥ 75%"},
 {w:39,d:"267–273",sub:"Wrap",focus:"Revision + Writing Practice",topics:"All subjects rapid revision, error log review, 3 essays",daily:"Rapid revision + 1 full mock",target:"Consistent ≥ 75% in last 5 mocks"}]},
-{id:3,title:"Phase 4",sub:"Mock Intensive",days:"Days 274–365",color:"#EF4444",goal:"Peak readiness through daily mocks, rapid revision, exam simulation, and mental conditioning.",weeks:[
+{id:3,title:"Phase 4",sub:"Mock Intensive",days:"Days 274–365",color:"#e53e3e",
+goal:"Peak readiness through daily mocks, rapid revision, exam simulation, and mental conditioning.",
+weeks:[
 {w:40,d:"274–280",sub:"Mocks",focus:"Daily Full Mock — Phase 1 Pattern",topics:"200-question full mocks (English+Quant+Reasoning+GA), timed, analysed",daily:"1 full Phase 1 mock + 2-hr error review",target:"Mock score consistency ≥ 78%"},
 {w:41,d:"281–287",sub:"Mocks",focus:"Phase 2 Descriptive Mocks",topics:"Timed essay + précis + RC comprehension under exam conditions",daily:"2-hour Phase 2 descriptive simulation",target:"Essay fully completed in under 40 min"},
 {w:42,d:"288–294",sub:"Revision",focus:"ESI Rapid Revision",topics:"All ESI chapters flashcard mode, one-pager notes, formula sheets",daily:"Full ESI revision + 30 ESI MCQs",target:"ESI one-pager complete"},
 {w:43,d:"295–301",sub:"Revision",focus:"F&M Rapid Revision",topics:"All F&M chapters, management theory cheat sheet, regulation notes",daily:"Full F&M revision + 30 MCQs",target:"Management theories comparison cheat sheet done"},
 {w:44,d:"302–308",sub:"Revision",focus:"SEBI Rapid Revision",topics:"All SEBI acts, regulations, market instruments, key case studies",daily:"Full SEBI revision + 30 MCQs",target:"All SEBI regulations summarised on one sheet"},
-{w:45,d:"309–315",sub:"CA Final",focus:"CA Sep to Dec 2026",topics:"Latest RBI circulars, SEBI updates, global finance events, Q4 data",daily:"2 hrs latest CA + 30 GA MCQs",target:"Q3–Q4 2026 CA capsule complete"},
+{w:45,d:"309–315",sub:"CA Final",focus:"CA Sep–Dec 2026",topics:"Latest RBI circulars, SEBI updates, global finance events, Q4 data",daily:"2 hrs latest CA + 30 GA MCQs",target:"Q3–Q4 2026 CA capsule complete"},
 {w:46,d:"316–322",sub:"Mocks",focus:"SEBI-Specific Pattern Mocks",topics:"SEBI Phase 1 full mock + capital market paper simulation",daily:"1 SEBI-pattern full mock + analysis",target:"SEBI mock accuracy ≥ 80%"},
 {w:47,d:"323–329",sub:"Mocks",focus:"RBI-Specific Pattern Mocks",topics:"RBI Phase 1 mock + Phase 2 ESI/F&M descriptive combined simulation",daily:"RBI Phase 1 + Phase 2 combined",target:"RBI combined score ≥ 80%"},
 {w:48,d:"330–336",sub:"Weak Areas",focus:"Targeted Weak Area Blitz",topics:"Bottom 3 topics from error log — intensive targeted practice only",daily:"3-hour focused weak-area sessions",target:"Weak areas improved to ≥ 70%"},
@@ -96,34 +212,20 @@ const PHASES=[
 ];
 
 const MOCKS=[
-{phase:"Phase 1 (Days 1–91)",freq:"3× / week",type:"Sectional Only",color:"#3B82F6",details:"Run 20–30 MCQ sectional tests for English, Quant, and Reasoning separately. No full mocks yet — concept building is the priority. After each sectional, spend 2× the test duration on analysis. Start your error log from Day 1.",exams:"SBI Clerk sectionals, SSC CGL Tier 1 sectionals"},
-{phase:"Phase 2 (Days 92–182)",freq:"4× / week",type:"Sectional + Subject Mocks",color:"#10B981",details:"3 sectional mocks on weekdays. 1 full Phase 1 mock every Sunday. Add subject mocks for ESI, F&M, SEBI (30 Qs each). Start tracking your sectional accuracy trends using the error log.",exams:"IBPS PO pre-mocks, NABARD Grade A mocks"},
-{phase:"Phase 3 (Days 183–273)",freq:"5× / week",type:"Full Phase 1 Mocks",color:"#F59E0B",details:"1 full 200-question Phase 1 mock every weekday. Weekend for Phase 2 descriptive practice. After each mock, categorise errors: (a) concept gap, (b) silly mistake, (c) time pressure. Target: improve your weakest section by 10% this phase.",exams:"SEBI Grade A full mocks, RBI Grade B Phase 1 mocks"},
-{phase:"Phase 4 (Days 274–365)",freq:"Daily",type:"Mixed Pattern + Grand Tests",color:"#EF4444",details:"Full-length mocks daily, alternating RBI, SEBI, IBPS, and SSC patterns. Weeks 50–51: grand tests under exact exam conditions. Zero new topics — only revision + practice. Maintain error log religiously until Day 365.",exams:"All target exams — peak performance mode"}
-];
-
-const EXAMS=[
-{exam:"RBI Grade B General Stream",pct:100,note:"Primary — entire syllabus covered",color:"#EF4444"},
-{exam:"SEBI Grade A General Stream",pct:100,note:"Primary — entire syllabus covered",color:"#06B6D4"},
-{exam:"NABARD Grade A / Grade B",pct:90,note:"Add: agriculture economics, rural development",color:"#10B981"},
-{exam:"SBI PO (Prelims + Mains)",pct:88,note:"Phase 1 fully covered; deepen banking GA",color:"#3B82F6"},
-{exam:"IBPS PO / IBPS Clerk",pct:85,note:"Phase 1 fully covered + GA",color:"#8B5CF6"},
-{exam:"SSC CGL (Tier 1 + Tier 2)",pct:80,note:"Add: history, polity, Tier 2 Math & English",color:"#F59E0B"},
-{exam:"RBI Assistant",pct:92,note:"Easier level — fully covered + computer knowledge",color:"#EC4899"},
-{exam:"NICL AO / Assistant",pct:85,note:"Add: insurance basics (LIC/GIC/IRDAI)",color:"#14B8A6"},
-{exam:"LIC AAO / LIC HFL",pct:82,note:"Add: life insurance concepts, IRDAI regulations",color:"#F97316"},
-{exam:"MP Apex Bank Computer Operator",pct:90,note:"CSE + banking fully covered; add SQL/Computer GK",color:"#6366F1"},
-{exam:"SSC Stenographer",pct:75,note:"English + GK covered; add skill test practice",color:"#84CC16"}
+{phase:"Phase 1 (Days 1–91)",freq:"3× / week",type:"Sectional Only",color:"#3b82f6",details:"Run 20–30 MCQ sectional tests for English, Quant, and Reasoning separately. No full mocks yet — concept building is the priority. After each sectional, spend 2× the test duration on analysis. Start your error log from Day 1.",exams:"SBI Clerk sectionals, SSC CGL Tier 1 sectionals"},
+{phase:"Phase 2 (Days 92–182)",freq:"4× / week",type:"Sectional + Subject Mocks",color:"#10b981",details:"3 sectional mocks on weekdays. 1 full Phase 1 mock every Sunday. Add subject mocks for ESI, F&M, SEBI (30 Qs each). Start tracking your sectional accuracy trends using the error log.",exams:"IBPS PO pre-mocks, NABARD Grade A mocks"},
+{phase:"Phase 3 (Days 183–273)",freq:"5× / week",type:"Full Phase 1 Mocks",color:"#f97316",details:"1 full 200-question Phase 1 mock every weekday. Weekend for Phase 2 descriptive practice. After each mock, categorise errors: (a) concept gap, (b) silly mistake, (c) time pressure. Target: improve your weakest section by 10% this phase.",exams:"SEBI Grade A full mocks, RBI Grade B Phase 1 mocks"},
+{phase:"Phase 4 (Days 274–365)",freq:"Daily",type:"Mixed Pattern + Grand Tests",color:"#e53e3e",details:"Full-length mocks daily, alternating RBI, SEBI, IBPS, and SSC patterns. Weeks 50–51: grand tests under exact exam conditions. Zero new topics — only revision + practice. Maintain error log religiously until Day 365.",exams:"All target exams — peak performance mode"}
 ];
 
 const SCHED=[
-{time:"5:30–6:00 AM",task:"Wake up, light exercise / yoga or walk (10–15 min)",type:"personal"},
-{time:"6:00–6:45 AM",task:"Morning Current Affairs — The Hindu headlines + PIB + ET scan",type:"ga"},
+{time:"5:30–6:00 AM",task:"Wake up, light exercise / yoga or walk",type:"personal"},
+{time:"6:00–6:45 AM",task:"Morning Current Affairs — The Hindu + PIB + ET scan",type:"ga"},
 {time:"6:45–8:15 AM",task:"Core Subject deep study (ESI / F&M / SEBI — rotate daily)",type:"core"},
 {time:"8:15–8:45 AM",task:"Breakfast + short break (no screens)",type:"personal"},
 {time:"8:45–10:15 AM",task:"Quantitative Aptitude — 30 MCQs or 3 DI sets",type:"quant"},
 {time:"10:15–11:30 AM",task:"Reasoning Ability — 30 MCQs or 3 puzzle sets",type:"reasoning"},
-{time:"11:30–12:30 PM",task:"English — RC passage + 20 MCQs or 1 descriptive essay (alternate days)",type:"english"},
+{time:"11:30–12:30 PM",task:"English — RC passage + 20 MCQs or 1 descriptive essay (alternate)",type:"english"},
 {time:"12:30–2:00 PM",task:"Lunch & proper rest — do not compromise this block",type:"personal"},
 {time:"2:00–4:00 PM",task:"Mock Test or PYQ solving session (sectional or full)",type:"mock"},
 {time:"4:00–5:00 PM",task:"Mock Analysis — categorise errors, update error log, revise concepts",type:"mock"},
@@ -131,207 +233,260 @@ const SCHED=[
 {time:"5:30–7:00 PM",task:"Current Affairs deep dive + Static GK revision",type:"ga"},
 {time:"7:00–8:00 PM",task:"Dinner & relaxation — no study, mental recovery",type:"personal"},
 {time:"8:00–9:30 PM",task:"Revision of day's topics + flashcard review + notes consolidation",type:"revision"},
-{time:"9:30–10:00 PM",task:"Next day planning — preview topics, set mock target, prepare materials",type:"revision"},
+{time:"9:30–10:00 PM",task:"Next day planning — preview topics, set mock target",type:"revision"},
 {time:"10:00 PM",task:"Sleep — 7–8 hours mandatory for memory consolidation",type:"personal"}
 ];
 
-// STATE
-const S={tab:0,phase:0,week:null,sec:SK[0],chk:{}};
-try{const sv=localStorage.getItem('rbi365');if(sv)S.chk=JSON.parse(sv);}catch(e){}
-function save(){try{localStorage.setItem('rbi365',JSON.stringify(S.chk));}catch(e){}}
+const EXAMS=[
+{exam:"RBI Grade B General Stream",pct:100,note:"Primary — entire syllabus covered",color:"#e53e3e"},
+{exam:"SEBI Grade A General Stream",pct:100,note:"Primary — entire syllabus covered",color:"#f97316"},
+{exam:"NABARD Grade A / Grade B",pct:90,note:"Add: agriculture economics, rural development",color:"#10b981"},
+{exam:"SBI PO (Prelims + Mains)",pct:88,note:"Phase 1 fully covered; deepen banking GA",color:"#3b82f6"},
+{exam:"IBPS PO / IBPS Clerk",pct:85,note:"Phase 1 fully covered + GA",color:"#8b5cf6"},
+{exam:"SSC CGL (Tier 1 + Tier 2)",pct:80,note:"Add: geometry, trigonometry, history, polity, non-verbal reasoning",color:"#7c3cd8"},
+{exam:"RBI Assistant",pct:92,note:"Easier level — fully covered + computer knowledge",color:"#ec4899"},
+{exam:"NICL AO / NIACL AO",pct:85,note:"Add: insurance basics (LIC/GIC/IRDAI)",color:"#0891b2"},
+{exam:"LIC AAO / LIC HFL",pct:82,note:"Add: life insurance concepts, IRDAI regulations",color:"#f97316"},
+{exam:"MP Apex Bank Computer Operator",pct:90,note:"CSE + banking fully covered; add SQL/Computer GK",color:"#6366f1"},
+{exam:"SSC Stenographer",pct:75,note:"English + GK covered; add skill test practice",color:"#16a34a"},
+{exam:"PFRDA / IRDAI / IFSCA Grade A",pct:80,note:"F&M + ESI + SEBI overlap ~80%; add sector-specific regs",color:"#6b7280"}
+];
 
-// UTILS
+// ─── STATE ────────────────────────────────────────────────────────────────────
+const S={tab:0,phase:0,week:null,sec:SK[0],chk:{}};
+let isLight=false;
+try{const sv=localStorage.getItem('rbi365v3');if(sv)S.chk=JSON.parse(sv);}catch(e){}
+function save(){try{localStorage.setItem('rbi365v3',JSON.stringify(S.chk));}catch(e){}}
+
+function toggleTheme(){
+  isLight=!isLight;
+  document.body.classList.toggle('light',isLight);
+  document.getElementById('themeBtn').textContent=isLight?'🌙 Dark':'☀️ Light';
+}
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
 function T(text,color){return'<span class="tag" style="background:'+color+'22;color:'+color+'">'+text+'</span>';}
+function ET(codes){
+  if(!codes||!codes.length)return'';
+  return'<div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:2px">'+
+    codes.map(c=>{const e=EC[c];return'<span class="etag" style="background:'+e.color+'22;color:'+e.color+'">'+e.code+'</span>';}).join('')+
+  '</div>';
+}
 function totalT(){return SK.reduce((s,k)=>s+SYL[k].topics.length,0);}
 function doneT(){return Object.keys(S.chk).filter(k=>S.chk[k]).length;}
 
-// HEADER
+// ─── HEADER ───────────────────────────────────────────────────────────────────
 function hdr(){
   const tot=totalT(),dn=doneT(),pct=Math.round(dn/tot*100);
   return'<div style="text-align:center;padding:16px 0 10px">'
-    +'<div style="font-size:20px;font-weight:800;color:#f1f5f9">🎯 365-Day Exam Planner</div>'
-    +'<div style="font-size:12px;color:#64748b;margin-top:4px">RBI Grade B + SEBI Grade A &nbsp;·&nbsp; General Stream &nbsp;·&nbsp; Target: Dec 2026 / 2027</div>'
-    +'<div style="font-size:11px;color:#475569;margin-top:2px">Also covers SBI PO · IBPS PO · SSC CGL · RBI Assistant · NICL AO &amp; more</div>'
-    +'<div style="margin-top:12px;display:inline-block;background:#1e293b;border-radius:10px;padding:10px 20px">'
-    +'<div style="font-size:11px;color:#64748b;margin-bottom:5px">Overall Syllabus Progress</div>'
-    +'<div style="background:#334155;border-radius:6px;height:10px;width:240px;overflow:hidden;margin:0 auto">'
-    +'<div id="pb" style="background:linear-gradient(90deg,#3B82F6,#8B5CF6);border-radius:6px;height:10px;width:'+pct+'%;transition:width .4s"></div>'
-    +'</div><div id="pt" style="font-size:12px;color:#94a3b8;margin-top:5px">'+dn+' / '+tot+' topics &nbsp;·&nbsp; '+pct+'% complete</div>'
+    +'<div style="font-size:21px;font-weight:900;color:var(--cr);text-shadow:0 0 30px var(--crglow);letter-spacing:-0.5px">🎯 365-Day Exam Planner</div>'
+    +'<div style="font-size:12px;color:var(--or);margin-top:4px;font-weight:600">RBI Grade B &nbsp;+&nbsp; SEBI Grade A &nbsp;·&nbsp; General Stream &nbsp;·&nbsp; Target: Dec 2026 / 2027</div>'
+    +'<div style="font-size:11px;color:var(--t3);margin-top:2px">SBI PO · IBPS PO · SSC CGL · RBI Asst · NICL AO · NABARD · PFRDA/IRDAI/IFSCA</div>'
+    +'<div style="margin-top:12px;display:inline-block;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 20px;box-shadow:0 0 20px var(--crglow)">'
+    +'<div style="font-size:11px;color:var(--t3);margin-bottom:5px">Overall Syllabus Progress</div>'
+    +'<div class="prog-wrap"><div class="glow-bar" id="pb" style="width:'+pct+'%"></div></div>'
+    +'<div id="pt" style="font-size:12px;color:var(--t2);margin-top:5px">'+dn+' / '+tot+' topics &nbsp;·&nbsp; '+pct+'% complete</div>'
     +'</div></div>';
 }
 
-// TAB NAV
+// ─── TAB NAV ──────────────────────────────────────────────────────────────────
 function nav(){
   const tabs=["🗺 Overview","📅 Phase Plan","✅ Syllabus","📊 Mock Strategy","⏰ Daily Schedule"];
-  return tabs.map((t,i)=>'<button class="tab-btn" onclick="st('+i+')" style="background:'+(S.tab===i?'#3B82F6':'#1e293b')+';color:'+(S.tab===i?'white':'#94a3b8')+'">'+t+'</button>').join('');
+  return tabs.map((t,i)=>'<button class="tab-btn" onclick="st('+i+')" style="background:'+(S.tab===i?'var(--cr)':'var(--card)')+';color:'+(S.tab===i?'white':'var(--t2)')+';border:1px solid '+(S.tab===i?'var(--cr)':'var(--border)')+';box-shadow:'+(S.tab===i?'0 0 12px var(--crglow)':'none')+'">'+t+'</button>').join('');
 }
 
-// OVERVIEW
+// ─── OVERVIEW ─────────────────────────────────────────────────────────────────
 function overview(){
-  let h='<div class="card"><div style="font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:12px">📍 365-Day Roadmap at a Glance</div>';
+  let h='<div class="card card-glow"><div style="font-size:14px;font-weight:700;color:var(--cr);margin-bottom:12px">📍 365-Day Roadmap at a Glance</div>';
   PHASES.forEach((p,i)=>{
     h+='<div style="display:flex;gap:12px;margin-bottom:'+(i<3?12:0)+'px;align-items:flex-start">'
-      +'<div style="width:4px;border-radius:2px;background:'+p.color+';align-self:stretch;min-height:55px;flex-shrink:0"></div>'
+      +'<div style="width:4px;border-radius:2px;background:'+p.color+';align-self:stretch;min-height:55px;flex-shrink:0;box-shadow:0 0 8px '+p.color+'88"></div>'
       +'<div><div style="display:flex;gap:8px;align-items:center;margin-bottom:2px;flex-wrap:wrap">'
-      +'<span style="font-weight:700;color:'+p.color+';font-size:13px">'+p.title+': '+p.sub+'</span>'
-      +'<span style="font-size:11px;color:#64748b">'+p.days+'</span></div>'
-      +'<div style="font-size:12px;color:#94a3b8;line-height:1.5">'+p.goal+'</div></div></div>';
+      +'<span style="font-weight:700;color:'+p.color+';font-size:13px;text-shadow:0 0 12px '+p.color+'66">'+p.title+': '+p.sub+'</span>'
+      +'<span style="font-size:11px;color:var(--t3)">'+p.days+'</span></div>'
+      +'<div style="font-size:12px;color:var(--t2);line-height:1.5">'+p.goal+'</div></div></div>';
   });
-  h+='</div><div class="card"><div style="font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:10px">🏆 Exams This Plan Prepares You For</div>';
+  h+='</div><div class="card"><div style="font-size:14px;font-weight:700;color:var(--or);margin-bottom:10px">🏆 Exam Coverage</div>';
   EXAMS.forEach((e,i)=>{
-    h+='<div style="display:flex;align-items:flex-start;justify-content:space-between;padding:8px 0;'+(i<EXAMS.length-1?'border-bottom:1px solid #1e3a5f;':'')+' gap:10px">'
-      +'<div style="flex:1"><div style="font-size:12px;font-weight:600;color:#e2e8f0">'+e.exam+'</div>'
-      +'<div style="font-size:11px;color:#64748b;margin-top:2px">'+e.note+'</div></div>'
+    h+='<div style="display:flex;align-items:flex-start;justify-content:space-between;padding:8px 0;'+(i<EXAMS.length-1?'border-bottom:1px solid var(--border);':'')+' gap:10px">'
+      +'<div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--t1)">'+e.exam+'</div>'
+      +'<div style="font-size:11px;color:var(--t3);margin-top:2px">'+e.note+'</div></div>'
       +T(e.pct+'%',e.color)+'</div>';
   });
   h+='</div>';
-  const res=[{s:"Quant",b:"Arun Sharma (DI + Quant), Sarvesh Kumar Verma, Rajesh Verma"},{s:"Reasoning",b:"MK Pandey, RS Aggarwal, previous year puzzle sheets"},{s:"English",b:"Word Power Made Easy (Norman Lewis), SP Bakshi, daily editorial reading"},{s:"ESI",b:"Ramesh Singh (Indian Economy), Economic Survey, Mrunal Economy notes"},{s:"F&amp;M",b:"M.Y. Khan Financial Services, ICAI material, management NCERT Class 12"},{s:"SEBI",b:"SEBI official website, NSE NCFM modules, NISM Series VIII"},{s:"Current Affairs",b:"The Hindu + PIB daily, GK Today monthly capsule, Insights on India"}];
-  h+='<div class="card"><div style="font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:10px">📚 Recommended Resources</div>';
-  res.forEach((r,i)=>{h+='<div style="padding:7px 0;'+(i<res.length-1?'border-bottom:1px solid #1e3a5f;':'')+' display:flex;gap:8px;align-items:baseline;flex-wrap:wrap">'+T(r.s,'#3B82F6')+'<span style="font-size:12px;color:#94a3b8;margin-left:4px">'+r.b+'</span></div>';});
+  const res=[{s:"Quant",b:"Arun Sharma (DI + Quant), Sarvesh Kumar Verma"},{s:"Reasoning",b:"MK Pandey, RS Aggarwal, PYQ puzzle sheets"},{s:"English",b:"Word Power Made Easy (Norman Lewis), SP Bakshi, editorials"},{s:"ESI",b:"Ramesh Singh (Indian Economy), Economic Survey, Mrunal notes"},{s:"F&amp;M",b:"M.Y. Khan Financial Services, ICAI material, NCERT Class 12 Accounts"},{s:"SEBI",b:"SEBI official website, NSE NCFM modules, NISM Series VIII"},{s:"CA",b:"The Hindu + PIB daily, GK Today monthly capsule, Insights on India"}];
+  h+='<div class="card"><div style="font-size:14px;font-weight:700;color:var(--am);margin-bottom:10px">📚 Recommended Resources</div>';
+  res.forEach((r,i)=>{h+='<div style="padding:7px 0;'+(i<res.length-1?'border-bottom:1px solid var(--border);':'')+' display:flex;gap:8px;align-items:baseline;flex-wrap:wrap">'+T(r.s,'var(--or)')+'<span style="font-size:12px;color:var(--t2);margin-left:4px">'+r.b+'</span></div>';});
   h+='</div>';
-  const tips=["Consistency &gt; Intensity — 8 hours/day every day beats 14-hour occasional marathons","Error log is not optional — it separates rank 1 from rank 1000","Current affairs is a daily habit, not a monthly task — start from Day 1","Mock analysis matters more than mock frequency — 1 well-analysed mock &gt; 3 abandoned ones","Descriptive writing must be practised from Month 2 — last-minute essay cramming fails","SEBI + RBI syllabus overlap is ~70% — treat them as one consolidated preparation"];
-  h+='<div class="card" style="border:1px solid #10B98133"><div style="font-size:13px;font-weight:700;color:#10B981;margin-bottom:8px">⚡ Key Success Principles</div>';
-  tips.forEach((t,i)=>{h+='<div style="display:flex;gap:8px;padding:5px 0;'+(i<tips.length-1?'border-bottom:1px solid #1e3a5f;':'')+'"><span style="color:#10B981;flex-shrink:0">→</span><span style="font-size:12px;color:#94a3b8;line-height:1.5">'+t+'</span></div>';});
+  const tips=["Consistency beats intensity — 8 hrs/day every day beats 14-hr occasional marathons","Error log is non-negotiable — it separates rank 1 from rank 1000","Current affairs is a daily habit, not a monthly task — start from Day 1","Mock analysis matters more than mock count — 1 well-analysed mock &gt; 3 abandoned ones","Descriptive writing must be practised from Month 2 — last-minute cramming fails","SEBI + RBI syllabus overlap is ~70–80% — treat them as one consolidated preparation","SSC prep adds only Geometry, Trigonometry, History, Polity, Geography, Non-verbal Reasoning"];
+  h+='<div class="card" style="border-color:var(--or)"><div style="font-size:13px;font-weight:700;color:var(--or);margin-bottom:8px">⚡ Key Success Principles</div>';
+  tips.forEach((t,i)=>{h+='<div style="display:flex;gap:8px;padding:5px 0;'+(i<tips.length-1?'border-bottom:1px solid var(--border);':'')+'"><span style="color:var(--cr);flex-shrink:0">→</span><span style="font-size:12px;color:var(--t2);line-height:1.5">'+t+'</span></div>';});
   h+='</div>';
   return h;
 }
 
-// PHASES
+// ─── PHASES ───────────────────────────────────────────────────────────────────
 function phases(){
   const p=PHASES[S.phase];
   let h='<div style="display:flex;gap:6px;margin-bottom:14px">';
   PHASES.forEach((ph,i)=>{
     const a=S.phase===i;
-    h+='<button class="phase-btn" onclick="sp('+i+')" style="background:'+(a?ph.color+'22':'#1e293b')+';color:'+(a?ph.color:'#64748b')+';border-color:'+(a?ph.color:'transparent')+'">'+ph.title+'<br><span style="font-weight:400;font-size:10px">'+ph.sub+'</span></button>';
+    h+='<button class="phase-btn" onclick="sp('+i+')" style="background:'+(a?ph.color+'22':'var(--card)')+';color:'+(a?ph.color:'var(--t3)')+';border-color:'+(a?ph.color:'var(--border)')+';box-shadow:'+(a?'0 0 12px '+ph.color+'44':'none')+'">'+ph.title+'<br><span style="font-weight:400;font-size:10px">'+ph.sub+'</span></button>';
   });
-  h+='</div><div class="card" style="border-left:4px solid '+p.color+'">'
-    +'<div style="font-weight:700;color:'+p.color+';font-size:14px">'+p.title+': '+p.sub+'</div>'
-    +'<div style="font-size:12px;color:#64748b;margin-top:2px">'+p.days+' &nbsp;·&nbsp; '+p.weeks.length+' weeks</div>'
-    +'<div style="font-size:12px;color:#cbd5e1;margin-top:6px;line-height:1.5">'+p.goal+'</div></div>';
-  h+='<div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:8px">Weekly Breakdown — tap any week to expand</div>';
+  h+='</div><div class="card" style="border-left:4px solid '+p.color+';box-shadow:0 0 20px '+p.color+'22">'
+    +'<div style="font-weight:700;color:'+p.color+';font-size:14px;text-shadow:0 0 15px '+p.color+'66">'+p.title+': '+p.sub+'</div>'
+    +'<div style="font-size:12px;color:var(--t3);margin-top:2px">'+p.days+' &nbsp;·&nbsp; '+p.weeks.length+' weeks</div>'
+    +'<div style="font-size:12px;color:var(--t2);margin-top:6px;line-height:1.5">'+p.goal+'</div></div>';
+  h+='<div style="font-size:12px;font-weight:600;color:var(--t3);margin-bottom:8px">Tap any week to expand</div>';
   p.weeks.forEach((w,i)=>{
     const exp=S.week===i;
-    h+='<div class="week-card" onclick="sw('+i+')">'
+    h+='<div class="week-card" onclick="sw('+i+')" style="'+(exp?'border-color:'+p.color+';box-shadow:0 0 12px '+p.color+'33;':'')+'">'
       +'<div style="display:flex;justify-content:space-between;align-items:center">'
       +'<div style="display:flex;gap:10px;align-items:center;flex:1">'
-      +'<div style="background:'+p.color+'22;color:'+p.color+';border-radius:6px;padding:5px 8px;font-size:11px;font-weight:700;flex-shrink:0">W'+w.w+'</div>'
-      +'<div><div style="font-size:13px;font-weight:600;color:#e2e8f0">'+w.focus+'</div>'
-      +'<div style="font-size:11px;color:#475569">Days '+w.d+' &nbsp;·&nbsp; '+w.sub+'</div></div></div>'
-      +'<span style="color:#475569;font-size:14px">'+(exp?'▲':'▼')+'</span></div>';
-    if(exp){h+='<div style="margin-top:12px;border-top:1px solid #334155;padding-top:12px;display:flex;flex-direction:column;gap:8px">'
-      +'<div>'+T('Topics','#8B5CF6')+' <span style="font-size:12px;color:#94a3b8;margin-left:6px">'+w.topics+'</span></div>'
-      +'<div>'+T('Daily','#10B981')+' <span style="font-size:12px;color:#94a3b8;margin-left:6px">'+w.daily+'</span></div>'
-      +'<div>'+T('Target','#F59E0B')+' <span style="font-size:12px;color:#94a3b8;margin-left:6px">'+w.target+'</span></div></div>';}
+      +'<div style="background:'+p.color+'22;color:'+p.color+';border-radius:6px;padding:5px 8px;font-size:11px;font-weight:700;flex-shrink:0;box-shadow:0 0 8px '+p.color+'44">W'+w.w+'</div>'
+      +'<div><div style="font-size:13px;font-weight:600;color:var(--t1)">'+w.focus+'</div>'
+      +'<div style="font-size:11px;color:var(--t3)">Days '+w.d+' &nbsp;·&nbsp; '+w.sub+'</div></div></div>'
+      +'<span style="color:var(--t3);font-size:14px">'+(exp?'▲':'▼')+'</span></div>';
+    if(exp){h+='<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:8px">'
+      +'<div>'+T('Topics','var(--pu)')+'<span style="font-size:12px;color:var(--t2);margin-left:6px">'+w.topics+'</span></div>'
+      +'<div>'+T('Daily','var(--gr)')+'<span style="font-size:12px;color:var(--t2);margin-left:6px">'+w.daily+'</span></div>'
+      +'<div>'+T('Target','var(--am)')+'<span style="font-size:12px;color:var(--t2);margin-left:6px">'+w.target+'</span></div></div>';}
     h+='</div>';
   });
   return h;
 }
 
-// SYLLABUS
+// ─── SYLLABUS ─────────────────────────────────────────────────────────────────
 function syllabus(){
-  let h='<div style="font-size:12px;color:#64748b;margin-bottom:10px">Tap a section to expand. Check topics as you complete them. Progress saves automatically.</div>';
+  let h='<div style="font-size:12px;color:var(--t3);margin-bottom:10px">Tap a section to expand. Tick topics as done. Tags show which exams each topic covers. Progress saved to browser.</div>';
   SK.forEach((sec,si)=>{
     const d=SYL[sec],open=S.sec===sec;
     let dn=0;for(let ti=0;ti<d.topics.length;ti++){if(S.chk[si+'_'+ti])dn++;}
     const pct=Math.round(dn/d.topics.length*100);
-    h+='<div class="acc-section"><div class="sec-hdr" onclick="ss('+si+')">'
-      +'<span style="font-size:13px;font-weight:700;color:'+d.color+';flex:1">'+sec+'</span>'
+    h+='<div class="acc-sec" style="'+(open?'border-color:'+d.color+';box-shadow:0 0 16px '+d.color+'22;':'')+'">'
+      +'<div class="sec-hdr" onclick="ss('+si+')">'
+      +'<span style="font-size:13px;font-weight:700;color:'+d.color+';text-shadow:0 0 10px '+d.color+'44;flex:1">'+sec+'</span>'
       +'<div style="display:flex;gap:8px;align-items:center">'
       +T(dn+'/'+d.topics.length,d.color)
-      +'<div style="background:#334155;border-radius:4px;height:6px;width:50px;overflow:hidden;display:inline-block">'
-      +'<div style="background:'+d.color+';height:6px;width:'+pct+'%"></div></div>'
-      +'<span style="color:#64748b;font-size:13px">'+(open?'▲':'▼')+'</span></div></div>';
+      +'<div style="background:var(--border2);border-radius:4px;height:6px;width:50px;overflow:hidden;display:inline-block">'
+      +'<div style="background:'+d.color+';height:6px;width:'+pct+'%;box-shadow:0 0 6px '+d.color+'88"></div></div>'
+      +'<span style="color:var(--t3);font-size:13px">'+(open?'▲':'▼')+'</span></div></div>';
     if(open){
-      h+='<div style="margin-top:10px;border-top:1px solid #334155;padding-top:10px">';
+      h+='<div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px">';
       d.topics.forEach((tp,ti)=>{
         const ck=S.chk[si+'_'+ti];
-        h+='<div class="chk-item" onclick="sc('+si+','+ti+')" style="background:'+(ck?d.color+'14':'transparent')+'">'
-          +'<div class="checkbox" style="border:2px solid '+(ck?d.color:'#475569')+';background:'+(ck?d.color:'transparent')+'">'+(ck?'✓':'')+'</div>'
-          +'<span style="font-size:12px;color:'+(ck?d.color:'#94a3b8')+';text-decoration:'+(ck?'line-through':'none')+';line-height:1.5">'+tp+'</span></div>';
+        const exCodes=TM[si]&&TM[si][ti]?TM[si][ti]:[];
+        h+='<div class="chk-row" onclick="sc('+si+','+ti+')" style="background:'+(ck?d.color+'14':'transparent')+'">'
+          +'<div class="chk-box" style="border:2px solid '+(ck?d.color:'var(--border2)')+';background:'+(ck?d.color:'transparent')+'">'+(ck?'✓':'')+'</div>'
+          +'<div style="flex:1"><span style="font-size:12px;color:'+(ck?d.color:'var(--t2)')+';text-decoration:'+(ck?'line-through':'none')+';line-height:1.5">'+tp+'</span>'
+          +ET(exCodes)+'</div></div>';
       });
       h+='</div>';
     }
     h+='</div>';
   });
+
+  // Extra Topics Section
+  h+='<div style="font-size:14px;font-weight:800;color:var(--am);margin:20px 0 8px;text-shadow:0 0 15px rgba(251,191,36,.3)">➕ Extra Topics by Exam Type</div>';
+  h+='<div style="font-size:12px;color:var(--t3);margin-bottom:12px">Topics <strong style="color:var(--t2)">not</strong> in the RBI/SEBI core syllabus but required for specific exams. Prep only if targeting those exams.</div>';
+  EXTRA.forEach(ex=>{
+    h+='<div class="card" style="border-color:'+ex.border+';box-shadow:0 0 14px '+ex.color+'18">'
+      +'<div style="font-size:13px;font-weight:700;color:'+ex.color+';margin-bottom:6px;text-shadow:0 0 10px '+ex.color+'44">'+ex.cat+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">'
+      +ex.exams.map(e=>'<span class="etag" style="background:'+ex.color+'22;color:'+ex.color+'">'+e+'</span>').join('')
+      +'</div>';
+    ex.topics.forEach(tp=>{
+      h+='<div style="padding:6px 0;border-top:1px solid var(--border)">'
+        +'<div style="font-size:12px;color:var(--t2);line-height:1.5">'+tp.t+'</div>'
+        +'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">'
+        +tp.ex.map(e=>'<span class="etag" style="background:'+ex.color+'18;color:'+ex.color+'">'+e+'</span>').join('')
+        +'</div></div>';
+    });
+    h+='</div>';
+  });
   return h;
 }
 
-// MOCKS
+// ─── MOCKS ────────────────────────────────────────────────────────────────────
 function mocks(){
   let h='';
   MOCKS.forEach(m=>{
-    h+='<div class="card" style="border-left:4px solid '+m.color+'">'
+    h+='<div class="card" style="border-left:4px solid '+m.color+';box-shadow:0 0 16px '+m.color+'22">'
       +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:6px">'
-      +'<div style="font-weight:700;color:'+m.color+';font-size:13px">'+m.phase+'</div>'
-      +'<div style="display:flex;gap:5px">'+T(m.freq,m.color)+' '+T(m.type,'#64748b')+'</div></div>'
-      +'<p style="font-size:12px;color:#94a3b8;line-height:1.7;margin:0 0 8px">'+m.details+'</p>'
-      +'<div style="font-size:11px;color:#475569"><span style="color:#64748b;font-weight:600">Practice on: </span>'+m.exams+'</div></div>';
+      +'<div style="font-weight:700;color:'+m.color+';font-size:13px;text-shadow:0 0 10px '+m.color+'66">'+m.phase+'</div>'
+      +'<div style="display:flex;gap:5px">'+T(m.freq,m.color)+' '+T(m.type,'var(--t3)')+'</div></div>'
+      +'<p style="font-size:12px;color:var(--t2);line-height:1.7;margin:0 0 8px">'+m.details+'</p>'
+      +'<div style="font-size:11px;color:var(--t3)"><span style="color:var(--t2);font-weight:600">Practice on: </span>'+m.exams+'</div></div>';
   });
-  h+='<div class="card" style="border:1px solid #F59E0B44">'
-    +'<div style="font-weight:700;color:#F59E0B;font-size:13px;margin-bottom:8px">📋 Error Log System — Non-Negotiable Rule</div>'
-    +'<p style="font-size:12px;color:#94a3b8;line-height:1.7;margin:0 0 10px">After every mock, log each wrong answer with three pieces of information: the topic, the error type, and the correct approach. Review your error log every Sunday. This single discipline separates rankers from average scorers far more than the raw number of mocks taken.</p>'
+  h+='<div class="card" style="border-color:var(--am)">'
+    +'<div style="font-weight:700;color:var(--am);font-size:13px;margin-bottom:8px">📋 Error Log System — Non-Negotiable Rule</div>'
+    +'<p style="font-size:12px;color:var(--t2);line-height:1.7;margin:0 0 10px">After every mock, log each wrong answer with three things: the topic, the error type, and the correct approach. Review every Sunday. This single habit separates rankers from average scorers more than mock frequency ever will.</p>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">';
-  [["Concept Gap","Re-study that chapter","#EF4444"],["Silly Mistake","Drill similar Qs more","#F59E0B"],["Time Pressure","Speed drills + shortcuts","#3B82F6"]].forEach(([t,s,c])=>{
+  [["Concept Gap","Re-study the chapter","#ef4444"],["Silly Mistake","Drill similar Qs","#f97316"],["Time Pressure","Speed drills + shortcuts","#3b82f6"]].forEach(([t,s,c])=>{
     h+='<div style="background:'+c+'11;border:1px solid '+c+'33;border-radius:8px;padding:8px;text-align:center">'
       +'<div style="color:'+c+';font-weight:700;font-size:11px">'+t+'</div>'
-      +'<div style="color:#64748b;font-size:10px;margin-top:3px">'+s+'</div></div>';
+      +'<div style="color:var(--t3);font-size:10px;margin-top:3px">'+s+'</div></div>';
   });
-  h+='</div><div style="font-weight:700;color:#f1f5f9;font-size:13px;margin-bottom:10px">📈 Score Target Progression</div>';
-  [{p:"Phase 1 — Sectionals",t:"≥ 60–65%",c:"#3B82F6"},{p:"Phase 2 — Full Phase 1 Mocks",t:"≥ 65–70%",c:"#10B981"},{p:"Phase 3 — Full Phase 1 Mocks",t:"≥ 72–78%",c:"#F59E0B"},{p:"Phase 4 — Grand Tests",t:"≥ 80–85%",c:"#EF4444"}].forEach((x,i)=>{
-    h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;'+(i<3?'border-bottom:1px solid #1e3a5f;':'')+'">'
-      +'<span style="font-size:12px;color:#94a3b8">'+x.p+'</span>'+T(x.t,x.c)+'</div>';
+  h+='</div><div style="font-weight:700;color:var(--t1);font-size:13px;margin-bottom:10px">📈 Score Target Progression</div>';
+  [{p:"Phase 1 — Sectionals",t:"≥ 60–65%",c:"#3b82f6"},{p:"Phase 2 — Full Phase 1 Mocks",t:"≥ 65–70%",c:"#10b981"},{p:"Phase 3 — Full Phase 1 Mocks",t:"≥ 72–78%",c:"#f97316"},{p:"Phase 4 — Grand Tests",t:"≥ 80–85%",c:"#e53e3e"}].forEach((x,i)=>{
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;'+(i<3?'border-bottom:1px solid var(--border);':'')+'">'
+      +'<span style="font-size:12px;color:var(--t2)">'+x.p+'</span>'+T(x.t,x.c)+'</div>';
   });
   h+='</div>';
   return h;
 }
 
-// SCHEDULE
+// ─── SCHEDULE ─────────────────────────────────────────────────────────────────
 function schedule(){
-  const tc={personal:"#64748b",ga:"#F59E0B",core:"#EF4444",quant:"#10B981",reasoning:"#8B5CF6",english:"#3B82F6",mock:"#EC4899",revision:"#06B6D4"};
+  const tc={personal:"var(--t3)",ga:"var(--am)",core:"var(--cr)",quant:"var(--gr)",reasoning:"var(--pu)",english:"var(--bl)",mock:"var(--pi)",revision:"var(--cy)"};
   const tl={personal:"Lifestyle",ga:"Curr. Affairs",core:"Core Subject",quant:"Quant",reasoning:"Reasoning",english:"English",mock:"Mock/PYQ",revision:"Revision"};
-  let h='<div class="card" style="border:1px solid #3B82F622"><div style="font-weight:700;color:#f1f5f9;font-size:14px;margin-bottom:4px">⏰ Ideal Daily Schedule (~10.5 Hours Study)</div><div style="font-size:11px;color:#64748b;margin-bottom:12px">Adjust timings to your routine. Keep the subject sequence and total hours consistent.</div>';
+  let h='<div class="card" style="border-color:var(--cr)"><div style="font-weight:700;color:var(--cr);font-size:14px;margin-bottom:4px;text-shadow:0 0 12px var(--crglow)">⏰ Ideal Daily Schedule (~10.5 Hours Study)</div><div style="font-size:11px;color:var(--t3);margin-bottom:12px">Adjust timings to your routine. Keep the subject sequence and total hours consistent.</div>';
   SCHED.forEach((item,i)=>{
-    h+='<div style="display:flex;gap:10px;padding:8px 0;'+(i<SCHED.length-1?'border-bottom:1px solid #1e3a5f;':'')+' align-items:flex-start">'
-      +'<div style="flex-shrink:0;width:100px;font-size:11px;color:#475569;font-family:monospace;padding-top:2px">'+item.time+'</div>'
-      +'<div style="flex:1;font-size:12px;color:#e2e8f0;line-height:1.5">'+item.task+'</div>'
+    h+='<div style="display:flex;gap:10px;padding:8px 0;'+(i<SCHED.length-1?'border-bottom:1px solid var(--border);':'')+' align-items:flex-start">'
+      +'<div style="flex-shrink:0;width:100px;font-size:11px;color:var(--t3);font-family:monospace;padding-top:2px">'+item.time+'</div>'
+      +'<div style="flex:1;font-size:12px;color:var(--t1);line-height:1.5">'+item.task+'</div>'
       +'<div style="flex-shrink:0">'+T(tl[item.type],tc[item.type])+'</div></div>';
   });
-  h+='</div><div class="card"><div style="font-weight:700;color:#f1f5f9;font-size:13px;margin-bottom:10px">📊 Daily Subject Hour Allocation</div>';
-  [{l:"Core Subjects (ESI / F&M / SEBI)",h:"1.5 hrs",c:"#EF4444"},{l:"Quantitative Aptitude",h:"1.5 hrs",c:"#10B981"},{l:"Reasoning Ability",h:"1.25 hrs",c:"#8B5CF6"},{l:"English Language",h:"1.0 hr",c:"#3B82F6"},{l:"Mock Test + Analysis",h:"2.0 hrs",c:"#EC4899"},{l:"Current Affairs + Static GK",h:"2.25 hrs",c:"#F59E0B"},{l:"Revision + Planning",h:"1.0 hr",c:"#06B6D4"}].forEach((x,i)=>{
-    h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;'+(i<6?'border-bottom:1px solid #1e3a5f;':'')+'">'
-      +'<div style="display:flex;gap:6px;align-items:center"><div style="width:10px;height:10px;border-radius:2px;background:'+x.c+';flex-shrink:0"></div>'
-      +'<span style="font-size:12px;color:#94a3b8">'+x.l+'</span></div>'+T(x.h,x.c)+'</div>';
+  h+='</div><div class="card"><div style="font-weight:700;color:var(--t1);font-size:13px;margin-bottom:10px">📊 Daily Subject Hour Allocation</div>';
+  [{l:"Core Subjects (ESI / F&M / SEBI)",h:"1.5 hrs",c:"var(--cr)"},{l:"Quantitative Aptitude",h:"1.5 hrs",c:"var(--gr)"},{l:"Reasoning Ability",h:"1.25 hrs",c:"var(--pu)"},{l:"English Language",h:"1.0 hr",c:"var(--bl)"},{l:"Mock Test + Analysis",h:"2.0 hrs",c:"var(--pi)"},{l:"Current Affairs + Static GK",h:"2.25 hrs",c:"var(--am)"},{l:"Revision + Planning",h:"1.0 hr",c:"var(--cy)"}].forEach((x,i)=>{
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;'+(i<6?'border-bottom:1px solid var(--border);':'')+'">'
+      +'<div style="display:flex;gap:6px;align-items:center"><div style="width:10px;height:10px;border-radius:2px;background:'+x.c+';flex-shrink:0;box-shadow:0 0 6px '+x.c+'88"></div>'
+      +'<span style="font-size:12px;color:var(--t2)">'+x.l+'</span></div>'+T(x.h,x.c)+'</div>';
   });
-  h+='<div style="margin-top:10px;padding:8px;background:#0f172a;border-radius:8px;text-align:center">'
-    +'<span style="font-size:12px;color:#64748b">Total: </span><span style="font-weight:700;color:#f1f5f9;font-size:14px">~10.5 hrs study</span>'
-    +'<span style="font-size:12px;color:#64748b"> + meals/breaks</span></div></div>'
-    +'<div class="card" style="border:1px solid #10B98133"><div style="font-weight:700;color:#10B981;font-size:13px;margin-bottom:8px">🌿 Weekly Rhythm &amp; Rest Strategy</div>'
-    +'<p style="font-size:12px;color:#94a3b8;line-height:1.7"><strong style="color:#e2e8f0">Sunday:</strong> Take your full Phase 1 mock in the morning (from Phase 2 onwards). Spend the afternoon on analysis + weekly revision. Take 2–3 hours fully off in the evening — this is not negotiable. Every 4 weeks, give yourself a half-day of complete rest with zero study. Mental recovery directly improves retention, recall speed, and mock performance. Treat rest as part of your strategy, not a reward.</p></div>';
+  h+='<div style="margin-top:10px;padding:8px;background:var(--bg2);border-radius:8px;text-align:center;border:1px solid var(--border)">'
+    +'<span style="font-size:12px;color:var(--t3)">Total: </span><span style="font-weight:700;color:var(--cr);font-size:14px">~10.5 hrs study</span>'
+    +'<span style="font-size:12px;color:var(--t3)"> + meals/breaks</span></div></div>'
+    +'<div class="card" style="border-color:var(--gr)"><div style="font-weight:700;color:var(--gr);font-size:13px;margin-bottom:8px">🌿 Weekly Rhythm &amp; Rest Strategy</div>'
+    +'<p style="font-size:12px;color:var(--t2);line-height:1.7"><strong style="color:var(--t1)">Sunday:</strong> Take your full Phase 1 mock in the morning (from Phase 2 onwards). Spend the afternoon on analysis + weekly revision. Take 2–3 hours fully off in the evening — this is not negotiable. Every 4 weeks, give yourself a half-day of complete rest with zero study. Mental recovery directly improves retention, recall speed, and mock performance. Treat rest as part of your strategy, not a reward.</p></div>';
   return h;
 }
 
-// RENDER
+// ─── RENDER ───────────────────────────────────────────────────────────────────
 function content(){
   switch(S.tab){case 0:return overview();case 1:return phases();case 2:return syllabus();case 3:return mocks();case 4:return schedule();}
 }
 function upd(){
   document.getElementById('tab-content').innerHTML=content();
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>{b.style.background=S.tab===i?'#3B82F6':'#1e293b';b.style.color=S.tab===i?'white':'#94a3b8';});
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    const a=S.tab===i;
+    b.style.background=a?'var(--cr)':'var(--card)';
+    b.style.color=a?'white':'var(--t2)';
+    b.style.borderColor=a?'var(--cr)':'var(--border)';
+    b.style.boxShadow=a?'0 0 12px var(--crglow)':'none';
+  });
   const tot=totalT(),dn=doneT(),pct=Math.round(dn/tot*100);
   const pb=document.getElementById('pb'),pt=document.getElementById('pt');
-  if(pb)pb.style.width=pct+'%';if(pt)pt.innerHTML=dn+' / '+tot+' topics &nbsp;·&nbsp; '+pct+'% complete';
+  if(pb)pb.style.width=pct+'%';
+  if(pt)pt.innerHTML=dn+' / '+tot+' topics &nbsp;·&nbsp; '+pct+'% complete';
 }
 function render(){
   document.getElementById('app').innerHTML=hdr()+'<div class="tab-nav" id="tn">'+nav()+'</div><div id="tab-content">'+content()+'</div>';
 }
-
-// HANDLERS
 function st(i){S.tab=i;S.week=null;upd();}
 function sp(i){S.phase=i;S.week=null;upd();}
 function sw(i){S.week=S.week===i?null:i;upd();}
 function ss(si){S.sec=S.sec===SK[si]?null:SK[si];upd();}
 function sc(si,ti){const k=si+'_'+ti;S.chk[k]=!S.chk[k];save();upd();}
-
 render();
 </script>
 </body>
